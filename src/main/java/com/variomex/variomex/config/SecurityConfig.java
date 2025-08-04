@@ -1,6 +1,7 @@
 package com.variomex.variomex.config;
 
 import com.variomex.variomex.util.JwtFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,13 +38,20 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()   // signup/login
-                        .requestMatchers("/genome/**").permitAll() // genome upload accessible
-                        .anyRequest().authenticated()              // everything else needs JWT
-                );
+                        .requestMatchers("/auth/**").permitAll()   // signup/login allowed
+                        .requestMatchers("/genome/**").authenticated() // genome needs JWT
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore((request, response, chain) -> {
+                    HttpServletRequest httpRequest = (HttpServletRequest) request; // ✅ cast here
+                    String path = httpRequest.getServletPath();
 
-        // Add JwtFilter only for authenticated requests
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                    if (path.startsWith("/auth/")) {
+                        chain.doFilter(request, response); // skip JWT filter for /auth/**
+                    } else {
+                        jwtFilter.doFilter(request, response, chain); // apply JWT filter
+                    }
+                }, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
