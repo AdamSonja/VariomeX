@@ -1,0 +1,14 @@
+### Upload genome file
+POST http://127.0.0.1:8080/genome/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="sample.vcf"
+Content-Type: text/plain
+
+< ./test-data/sample.vcf
+--WebAppBoundary
+Content-Disposition: form-data; name="ownerId"
+
+1
+--WebAppBoundary--

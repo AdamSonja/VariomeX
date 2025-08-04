@@ -1,0 +1,5 @@
+##fileformat=VCFv4.2
+##source=TestVCF
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+1       123456  rs123   A       T       50      PASS    DP=100;AF=0.5
+2       654321  rs456   G       C       99      PASS    DP=200;AF=0.7
