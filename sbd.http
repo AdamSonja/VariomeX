@@ -3,21 +3,7 @@ POST http://127.0.0.1:8080/auth/login
 Content-Type: application/json
 
 {
-  "email": "sunny@example.com",
-  "password": "mypassword123"
+  "email": "ksebusunny@gmail.com",
+  "password": "iloveyou"
 }
 
-> {% client.global.set("auth_token", response.body.token); %}
-
-
-### Upload genome file with JWT
-POST http://127.0.0.1:8080/genome/upload
-Authorization: Bearer {{auth_token}}
-Content-Type: multipart/form-data; boundary=boundary123
-
---boundary123
-Content-Disposition: form-data; name="file"; filename="sample.vcf"
-Content-Type: text/plain
-
-< ./sample.vcf
---boundary123--
